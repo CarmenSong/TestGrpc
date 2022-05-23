@@ -19,8 +19,8 @@ using TestRos::TurtleReply;
 class TestRosService : public Turtlesim::Service {
         Status MoveTurtle(ServerContext* context, const TurtleRequest* request,
         TurtleReply* reply) {
-                reply->set_message(request->name());
-                return Status::ok;
+                reply->set_msg_reply(request->msg_request());
+                return Status::OK;
         } 
 };
 
@@ -32,7 +32,7 @@ void RunServer() {
         grpc::reflection::InitProtoReflectionServerBuilderPlugin();
         
         ServerBuilder builder;
-        builder.AddListeningService(&service);
+        builder.AddListeningPort(server_address, InsecureServerCredentials());
         builder.RegisterService(&service);
 
         std::unique_ptr<Server> server(builder.BuildAndStart());
