@@ -21,7 +21,7 @@ class TestRosClient {
 
         std::string MoveTurtle(const std::string& user) {
                 TurtleRequest request;
-                request.set_name(user);
+                request.set_msg_request(user);
 
                 TurtleReply reply;
 
@@ -30,7 +30,7 @@ class TestRosClient {
                 Status status = stub_->MoveTurtle(&context, request, &reply);
 
                 if (status.ok()) {
-                        return reply.message();
+                        return reply.msg_reply();
                 } else {
                         std::cout << status.error_code() << ":" << status.error_message() 
                         << std::endl;
