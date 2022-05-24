@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package TestRos;
+
+service Turtlesim {
+        rpc MoveTurtle (TurtleRequest) returns (TurtleReply) {}
+}
+
+message TurtleRequest {
+        string msg_request = 1;
+}
+
+message TurtleReply {
+        string msg_reply = 1;
+}
