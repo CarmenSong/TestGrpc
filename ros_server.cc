@@ -19,7 +19,8 @@ using TestRos::TurtleReply;
 class TestRosService : public Turtlesim::Service {
         Status MoveTurtle(ServerContext* context, const TurtleRequest* request,
         TurtleReply* reply) {
-                reply->set_msg_reply(request->msg_request());
+                reply->set_msg_reply("Communication Success!");
+                std::cout << request->msg_request() << std::endl;
                 return Status::OK;
         } 
 };
