@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5.1)
 
 project(ros_grpc C CXX)
 
-include(/home/jessewl/work/grpc/examples/cpp/cmake/common.cmake)
+include(common.cmake)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         add_compile_options(-Wall -Wextra -Wpedantic)
