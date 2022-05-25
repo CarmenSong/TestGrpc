@@ -33,7 +33,7 @@ void RunServer() {
         grpc::reflection::InitProtoReflectionServerBuilderPlugin();
         
         ServerBuilder builder;
-        builder.AddListeningPort(server_address, InsecureServerCredentials());
+        builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
         builder.RegisterService(&service);
 
         std::unique_ptr<Server> server(builder.BuildAndStart());
