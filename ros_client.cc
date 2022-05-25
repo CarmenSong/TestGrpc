@@ -67,7 +67,10 @@ int main(int argc, char** argv) {
         TestRosClient testros(
                 grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials())
         );
-        std::string user("ros2 run turtlesim turtle_node");
-        std::string reply = testros.MoveTurtle(user);
-        std::cout << reply << std::endl;    
+        std::string user;
+        while (user != "false") {
+                std::getline(std::cin, user);
+                if (user == "end") return 0;
+                std::string reply = testros.MoveTurtle(user);
+                std::cout << reply << std::endl;    
 }
