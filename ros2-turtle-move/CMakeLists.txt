@@ -13,6 +13,10 @@ add_executable(turtle_move src/turtle_move.cpp)
 ament_target_dependencies(turtle_move rclcpp geometry_msgs)
 install(TARGETS turtle_move DESTINATION ${PROJECT_NAME})
 
+add_executable(turtle_move_fast src/turtle_move_fast.cpp)
+ament_target_dependencies(turtle_move_fast rclcpp geometry_msgs)
+install(TARGETS turtle_move_fast DESTINATION ${PROJECT_NAME})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
