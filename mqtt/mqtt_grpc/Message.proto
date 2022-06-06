@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package mesg;
+ 
+message Message {
+    int32 idx=1;
+    string head=2;
+    string body=3;
+}
