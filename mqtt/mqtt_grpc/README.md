@@ -17,4 +17,3 @@ cmake ..
 make 
 ```
 
-If the protobuf not found. vim CMakeLists.txt and modify the protobuf root path
