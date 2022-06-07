@@ -4,8 +4,6 @@
 #include <vector>
 #include "Message.pb.h"
 #include "mosquitto.h"
- 
-using namespace std;
 
 namespace mesg {
 
@@ -24,11 +22,9 @@ public:
     std::cout << "Broker Connection Success" << std::endl;
     }
 
-    int pub_message(int idx, const std::string& m) {
+    int pub_message(const std::string& m) {
 
         Message message;
-        message.set_idx(idx);
-        message.set_head(m);
         message.set_body(m);
         //message.mutable_body()->add_context(m);
 
@@ -36,8 +32,8 @@ public:
         message.SerializeToString(&message_string); //Serializes the message and stroes in a given string
         //std::cout <<  message_string << std::endl;
         mosquitto_publish(mosq, nullptr, mesg_pub_topic.c_str(),
-                          static_cast<int>(message_string.length()) + 1,
-                          message_string.c_str(), 0, false);
+                          static_cast<int>(message_string.length()+1),
+                          message_string.c_str(), 0, false); 
         
         mosquitto_disconnect(mosq);
         mosquitto_destroy(mosq);
@@ -61,7 +57,7 @@ int main(int argc, char *argv[]) {
     mesg::MessageHandler message;
 
     message.init();
-    message.pub_message(1, "test");
+    message.pub_message("test");
 
     // Optional:  Delete all global objects allocated by libprotobuf.
     google::protobuf::ShutdownProtobufLibrary();
