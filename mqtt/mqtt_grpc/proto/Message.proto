@@ -1,9 +1,15 @@
 syntax = "proto3";
 
 package mesg;
- 
+
+service Transfer {
+    rpc MsgTransfer (Message) returns (MessageReply) {}
+}
+
 message Message {
-    int32 idx=1;
-    string head=2;
-    string body=3;
+    string body=1;
+}
+
+message MessageReply {
+    string msg_reply = 1;
 }
