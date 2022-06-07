@@ -1,6 +1,8 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <thread>
+
 
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
@@ -9,9 +11,8 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 
-#include "TestRos.grpc.pb.h"
-
 #include "RunTurtle.h"
+#include "TestRos.grpc.pb.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -22,18 +23,33 @@ using TestRos::TurtleRequest;
 using TestRos::TurtleReply;
 
 class TestRosService : public Turtlesim::Service {
+
         Status MoveTurtle(ServerContext* context, const TurtleRequest* request,
         TurtleReply* reply) {
-                reply->set_msg_reply("Communication Success!");
-                std::cout << request->msg_request() << std::endl;
+
+                auto node = rclcpp::Node::make_shared("turtle_controller");
+                auto publisher = node->create_publisher<geometry_msgs::msg::Twist>("/turtle1/cmd_vel",1);
+
+                auto msg = std::make_shared<geometry_msgs::msg::Twist>();
+
+                while (request->msg_request() != "false") {
+                        msg->linear.x = stof(request->msg_request());
+                        msg->angular.z = stof(request->msg_request());
+                        publisher->publish(*msg);
+
+                        reply->set_msg_reply("Connection Success!");
+                        //std::cout << "Connection Success! " << request->msg_request() << std::endl;
+                //std::cout << request->msg_request() << std::endl;
+
                 return Status::OK;
         } 
+};
 };
 
 void RunServer() {
 
         std::string server_address("localhost:9515");
-        TestRosService service;
+        TestRosService service;      
 
         grpc::EnableDefaultHealthCheckService(true);
         grpc::reflection::InitProtoReflectionServerBuilderPlugin();
@@ -51,9 +67,12 @@ void RunServer() {
 int main(int argc, char** argv) {
 
         rclcpp::init(argc, argv);
-        RunTurtle();
+
+        //RunTurtle();
+        //rclcpp::shutdown();
+        std::thread thr2(RunServer);
+        thr2.join();
         rclcpp::shutdown();
-        RunServer();
         
 
         return 0;
