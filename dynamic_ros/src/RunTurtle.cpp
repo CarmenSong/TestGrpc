@@ -8,8 +8,8 @@ void Runturtle(int a, int b) {
 
         while (rclcpp::ok()) {
                 auto msg = geometry_msgs::msg::Twist();
-                msg.linear.x = 8*a;
-                msg.angular.z = 3*b;
+                msg.linear.x = a;
+                msg.angular.z = b;
                 publisher->publish(msg);
 
         }
