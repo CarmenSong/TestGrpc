@@ -1,5 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+#include "libupdate.cpp"
 
 void Runturtle(int a, int b) {
         
@@ -11,6 +12,12 @@ void Runturtle(int a, int b) {
                 msg.linear.x = a;
                 msg.angular.z = b;
                 publisher->publish(msg);
+
+                lib_management();
+                if (roslib_update) {
+                        roslib_update = false;
+                        break;
+                }
 
         }
 
