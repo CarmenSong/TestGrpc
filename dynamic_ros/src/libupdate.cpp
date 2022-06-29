@@ -2,10 +2,21 @@
 #include <chrono>
 #include <filesystem>
 #include <ctime>
+#include <iostream>
+#include <algorithm>
 #include <iomanip>
+#include <vector>
+#include <string>
 #include <sstream>
+#include "unistd.h"
 
-std::string get_filetime(std::filesystem::file_time_type tp)
+#define Lib_PATH "/home/jessewl/work/C-Programs/dynamic_ros/build/test/"
+
+std::vector<std::string> Lib_container {"/home/jessewl/work/C-Programs/dynamic_ros/build/test/libdlopenRos.so"};
+bool dirc_update = false;
+bool roslib_update = false;
+
+std::string get_dirctime(std::filesystem::file_time_type tp)
 {
         auto sec = std::chrono::duration_cast<std::chrono::seconds>(tp.time_since_epoch());
         std::time_t t = sec.count();
@@ -16,16 +27,32 @@ std::string get_filetime(std::filesystem::file_time_type tp)
         
 }
 
-bool if_lib_update(std::string initial_filetime, std::filesystem::file_time_type filetime)
+bool if_dirc_update(std::string initial_filetime, std::filesystem::file_time_type filetime)
 {
 
 
-        filetime = std::filesystem::last_write_time("/home/jessewl/work/C-Programs/dynamic_ros/build/test/libdlopenRos.so");
-        std::string update_date = get_filetime(filetime);
-        if (update_date != initial_filetime) return true;
+        filetime = std::filesystem::last_write_time(Lib_PATH);
+        std::string update_date = get_dirctime(filetime);
+        if (update_date != initial_filetime)  {
+                std::cout << "Dirc Updated" << std::endl;
+
+                return true;
+        };
         sleep(10);
-        
 
         return false;
 
+}
+
+void lib_management() {
+        for (const std::filesystem::directory_entry& x : std::filesystem::directory_iterator(Lib_PATH))
+        {
+                if (x.path().extension() == ".so" && std::find(Lib_container.begin(), Lib_container.end(), x.path()) == Lib_container.end()) {
+
+                        Lib_container.push_back(x.path());
+                        std::cout << "New Lib Prepared" << std::endl;
+                        roslib_update = true;
+                        break;
+                } else {dirc_update = false; roslib_update = false;}
+        }
 }
