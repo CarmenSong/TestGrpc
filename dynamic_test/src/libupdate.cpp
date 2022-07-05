@@ -49,7 +49,7 @@ void lib_management() {
                 if (x.path().extension() == ".so" && std::find(Lib_container.begin(), Lib_container.end(), x.path()) == Lib_container.end()) {
 
                         Lib_container.push_back(x.path());
-                        std::cout << "New Lib Prepared" << std::endl;
+                        //std::cout << "New Lib Prepared" << std::endl;
                         roslib_update = true;
                 } 
         }
